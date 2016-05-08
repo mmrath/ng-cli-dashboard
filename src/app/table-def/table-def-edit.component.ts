@@ -11,6 +11,7 @@ import {TableDef, ColumnDef} from '../shared/models';
   moduleId: module.id,
   selector: 'app-table-def-edit',
   templateUrl: 'table-def-edit.component.html',
+  providers: [TableDefService],
 })
 export class TableDefEditComponent implements OnInit, OnActivate {
 
@@ -21,8 +22,7 @@ export class TableDefEditComponent implements OnInit, OnActivate {
   form: ControlGroup;
   columns: ControlArray;
 
-  columnTypes: Array<string> = [
-    'REGULAR', 'CREATED_BY', 'CREATED_DATE', 'LAST_MODIFIED_BY',
+  columnTypes: Array<string> = ['REGULAR', 'CREATED_BY', 'CREATED_DATE', 'LAST_MODIFIED_BY',
     'LAST_MODIFIED_DATE', 'PRIMARY_KEY', 'VERSION',];
 
   dataTypes: Array<string> = [
@@ -31,18 +31,18 @@ export class TableDefEditComponent implements OnInit, OnActivate {
 
   constructor(private tableDefService: TableDefService) {
     this.columns = new ControlArray([]);
-    var nameControl = new Control('',
+    let tableNameControl = new Control('',
       Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_]+$')]));
 
-    var aliasControl = new Control('',
+    let codeNameControl = new Control('',
       Validators.compose([Validators.required, Validators.pattern('^[a-z0-9-]+$')]));
 
     this.form = new ControlGroup({
       id: new Control(''),
-      alias: aliasControl,
-      name: nameControl,
-      displayLabel: new Control('', Validators.compose(
-        [Validators.required, Validators.maxLength(60)])),
+      tableName: tableNameControl,
+      codeName: codeNameControl,
+      displayLabel: new Control('',
+        Validators.compose([Validators.required, Validators.maxLength(30)])),
       insertable: new Control(true, Validators.required),
       updatable: new Control(true, Validators.required),
       deletable: new Control(true, Validators.required),
@@ -50,18 +50,16 @@ export class TableDefEditComponent implements OnInit, OnActivate {
       columns: this.columns
     });
 
-    nameControl.valueChanges
-      .debounceTime(400)
-      .distinctUntilChanged(
-      (a, b) => {
+    tableNameControl.valueChanges.debounceTime(400)
+      .distinctUntilChanged((a, b) => {
         if (typeof a === 'string' && typeof b === 'string') {
           return (<string>a).toUpperCase() === (<string>b).toUpperCase();
         } else {
           return false;
         }
       })
-      .filter(_ => nameControl.valid)
-      .switchMap( name =>
+      .filter(_ => tableNameControl.valid)
+      .switchMap(name =>
         this.tableDefService.getByTableName(<string>name)
           .catch(error => { return Observable.empty(); })
       )
@@ -73,6 +71,29 @@ export class TableDefEditComponent implements OnInit, OnActivate {
   }
 
   ngOnInit() {
+    if (!this.isNew) {
+      this.tableDefService.findById(this.id).subscribe(
+        tableDef => {
+          this.updateControlValue('id', tableDef.id);
+          this.updateControlValue('tableName', tableDef.tableName);
+          this.updateControlValue('codeName', tableDef.codeName);
+          this.updateControlValue('displayLabel', tableDef.displayLabel);
+          this.updateControlValue('insertable', tableDef.insertable);
+          this.updateControlValue('updatable', tableDef.updatable);
+          this.updateControlValue('deletable', tableDef.deletable);
+          this.updateControlValue('multiSelectable', tableDef.multiSelectable);
+
+          if (typeof tableDef.columns !== 'undefined' && tableDef.columns instanceof Array) {
+            for (var columnDef of tableDef.columns) {
+              this.addColumn(columnDef);
+            }
+          }
+        },
+        err => {
+          console.log('Error ' + err);
+        }
+      );
+    }
   }
 
   routerOnActivate(curr: RouteSegment, prev?: RouteSegment, currTree?: Tree<RouteSegment>,
@@ -93,7 +114,6 @@ export class TableDefEditComponent implements OnInit, OnActivate {
       columnDef = {};
     }
     console.log('Adding Column');
-
     this.columns.push(new ControlGroup(
       {
         id: new Control(columnDef.id),
@@ -114,7 +134,11 @@ export class TableDefEditComponent implements OnInit, OnActivate {
 
   onSubmit($event) {
     console.log('Table Def to save' + this.form.value);
-    this.tableDefService.save(this.form.value).subscribe(res => { console.log(res); });
+    if (this.isNew) {
+      this.tableDefService.save(this.form.value).subscribe(res => { console.log(res); });
+    } else {
+      this.tableDefService.update(this.id, this.form.value).subscribe(res => { console.log(res); });
+    }
   }
 
 
@@ -139,5 +163,10 @@ export class TableDefEditComponent implements OnInit, OnActivate {
         this.addColumn(columnDef);
       }
     }
+  }
+
+  private updateControlValue(key: string, value: any) {
+    let control: Control = <Control>this.form.find(key);
+    control.updateValue(value);
   }
 }

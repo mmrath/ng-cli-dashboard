@@ -1,7 +1,7 @@
 <div class="row">
 
   <div class="row">
-    <alert *ngFor="#alert of errorMessages;#i = index" [type]="'danger'" dismissible="true" (close)="closeErrorMessage(i)">{{alert}}</alert>
+    <div *ngFor="let alert of errorMessages;let i = index">{{alert}}</div>
   </div>
   <form class="" (ngSubmit)="onSubmit($event)" [ngFormModel]="form">
     <div class="col-sm-12 col-md-12 col-lg-12">
@@ -9,33 +9,31 @@
         <template [ngSwitchWhen]="true">New Table Definition</template>
         <template ngSwitchDefault>Edit Table Definition</template>
       </legend>
-      <div class="form-group row" [ngClass]="{'has-danger':!form.find('name').valid && form.find('name').touched}">
+      <div class="form-group row" [ngClass]="{'has-danger':!form.find('tableName').valid && form.find('tableName').touched}">
         <label [attr.for]="name" class="col-sm-4 col-md-2 form-control-label">Table Name</label>
         <div class="col-sm-8 col-md-3">
           <template [ngIf]="!isNew">
             <input type="hidden" class="form-control" id="id" ngControl="id" />
           </template>
-          <input type="text" [ngClass]="{'form-control-danger':!form.find('name').valid && form.find('name').touched}" class="form-control"
-          id="tableName" ngControl="name" placeholder="Table name" />
-          <small class="text-help has-danger" *ngIf="form.find('name').touched && form.find('name').hasError('required')">
+          <input type="text" [ngClass]="{'form-control-danger':!form.find('tableName').valid && form.find('tableName').touched}" class="form-control" id="tableName" ngControl="tableName" placeholder="Table name" />
+          <small class="text-help has-danger" *ngIf="form.find('tableName').touched && form.find('tableName').hasError('required')">
             Table name is required.
           </small>
-          <small class="text-help has-danger" *ngIf="!form.find('name').hasError('required') && form.find('name').hasError('regex')">
+          <small class="text-help has-danger" *ngIf="!form.find('tableName').hasError('required') && form.find('tableName').hasError('regex')">
             Table name can only contain letter, digits and underscore.
           </small>
         </div>
       </div>
 
-      <div class="form-group row" [ngClass]="{'has-danger':!form.find('alias').valid && form.find('alias').touched}">
-        <label [attr.for]="name" class="col-sm-4 col-md-2 form-control-label">Alias</label>
+      <div class="form-group row" [ngClass]="{'has-danger':!form.find('codeName').valid && form.find('codeName').touched}">
+        <label [attr.for]="name" class="col-sm-4 col-md-2 form-control-label">Code name</label>
         <div class="col-sm-8 col-md-3">
-          <input type="text" [ngClass]="{'form-control-danger':!form.find('alias').valid && form.find('alias').touched}" class="form-control"
-          id="alias" ngControl="alias" placeholder="Tag ID">
-          <small class="text-help has-danger" *ngIf="form.find('alias').touched && form.find('alias').hasError('required')">
-            Table tag id is requred.
+          <input type="text" [ngClass]="{'form-control-danger':!form.find('codeName').valid && form.find('codeName').touched}" class="form-control" id="alias" ngControl="codeName" placeholder="Code name">
+          <small class="text-help has-danger" *ngIf="form.find('codeName').touched && form.find('codeName').hasError('required')">
+            Table code name is requred.
           </small>
-          <small class="text-help has-danger" *ngIf="!form.find('alias').hasError('required') && form.find('alias').hasError('regex')">
-            Table tag id can only contain lowercase letters, digits and -(hyphen).
+          <small class="text-help has-danger" *ngIf="!form.find('codeName').hasError('required') && form.find('codeName').hasError('regex')">
+            Table code name can only contain lowercase letters, digits and -(hyphen).
           </small>
         </div>
       </div>
@@ -43,13 +41,12 @@
       <div class="form-group row" [ngClass]="{'has-danger':!form.find('displayLabel').valid && form.find('displayLabel').touched}">
         <label [attr.for]="description" class="col-sm-4 col-md-2 form-control-label">Display Label</label>
         <div class="col-sm-8 col-md-3">
-          <input type="text" length="60" [ngClass]="{'form-control-danger':!form.find('displayLabel').valid && form.find('displayLabel').touched}"
-          class="form-control" id="description" placeholder="Display Label" ngControl="displayLabel" />
+          <input type="text" length="60" [ngClass]="{'form-control-danger':!form.find('displayLabel').valid && form.find('displayLabel').touched}" class="form-control" id="description" placeholder="Display Label" ngControl="displayLabel" />
         </div>
       </div>
 
       <div class="form-group row">
-        <div class="col-sm-8 col-sm-offset-4 col-md-3 col-md-offset-2">
+        <div class="col-sm-8 offset-sm-4 col-md-3 offset-md-2">
           <div class="checkbox m-a-0">
             <label>
               <input type="checkbox" id="insertable" ngControl="insertable"> Allow insertion
@@ -73,128 +70,56 @@
         </div>
       </div>
       <div class="form-group row">
-        <div class="col-sm-offset-4 col-sm-8 col-md-offset-2 col-md-3">
+        <div class="offset-sm-4 col-sm-8 offset-md-2 col-md-3">
           <button type="submit" class="btn btn-secondary">Save</button>
           <a class="btn btn-secondary" (click)="addColumn()">Add Column</a>
         </div>
       </div>
-      <accordion closeOthers="true">
-        <accordion-group *ngFor="#column of columns.controls">
-          <div accordion-heading>
-            <div class="card-header">{{column.controls.displayLabel.value}}</div>
-            <i class="pull-right glyphicon" [ngClass]="{'glyphicon-chevron-down': isOpen, 'glyphicon-chevron-right': !isOpen}"></i>
-          </div>
-
-          <div class="row">
-
-            <div class="col-sm-12 col-md-12 col-lg-12">
-              <div class="card-deck-wrapper">
-                <div class="card-deck">
-                  <div class="card">
-                    <div class="card-header">General</div>
-                    <div class="card-block">
-                      <div class="col-sm-12 p-l-0">
-                        <div class="form-group row">
-                          <label class="col-sm-4 form-control-label form-control-sm">Column Name</label>
-                          <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" placeholder="Name" [ngFormControl]="column.controls.name">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-4 form-control-label form-control-sm">Display Label</label>
-                          <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" [ngFormControl]="column.controls.displayLabel" placeholder="Display Label">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-4 form-control-label form-control-sm">Column Type</label>
-                          <div class="col-sm-8">
-                            <select class="form-control form-control-sm" [ngFormControl]="column.controls.columnType">
-                              <option *ngFor="#columnType of columnTypes" [value]="columnType">{{columnType}}</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-4  form-control-label form-control-sm">Data Type</label>
-                          <div class="col-sm-8">
-                            <select class="form-control form-control-sm" [ngFormControl]="column.controls.dataType">
-                              <option *ngFor="#dataType of dataTypes" [value]="dataType">{{dataType}}</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-4 form-control-label form-control-sm">Length</label>
-                          <div class="col-sm-8">
-                            <input type="number" class="form-control form-control-sm" [ngFormControl]="column.controls.length" placeholder="Length">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card">
-                    <div class="card-header">General</div>
-                    <div class="card-block">
-                      <div class="col-lg-6 p-l-0">
-                        <div class="checkbox m-a-0">
-                          <label class="form-control-label form-control-sm">
-                            <input type="checkbox" [ngFormControl]="column.controls.showInList"> Show in list
-                          </label>
-                        </div>
-                        <div class="checkbox m-a-0">
-                          <label class="form-control-label form-control-sm">
-                            <input type="checkbox" [ngFormControl]="column.controls.nullable"> Allow null
-                          </label>
-                        </div>
-                        <div class="checkbox m-a-0">
-                          <label class="form-control-label form-control-sm">
-                            <input type="checkbox" [ngFormControl]="column.controls.insertable"> Allow insert
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-lg-6 p-l-0">
-                        <div class="checkbox m-a-0">
-                          <label class="form-control-label form-control-sm">
-                            <input type="checkbox" [ngFormControl]="column.controls.updatable"> Allow update
-                          </label>
-                        </div>
-                        <div class="checkbox m-a-0">
-                          <label class="form-control-label form-control-sm">
-                            <input type="checkbox" [ngFormControl]="column.controls.searchable"> Allow search
-                          </label>
-                        </div>
-                        <div class="checkbox m-a-0">
-                          <label class="form-control-label form-control-sm">
-                            <input type="checkbox" [ngFormControl]="column.controls.sortable"> Allow sort
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card">
-                    <div class="card-header">General</div>
-                    <div class="card-block">
-                      <div class="col-lg-12 p-l-0">
-                        <div class="form-group row">
-                          <label class="col-sm-4 form-control-label form-control-sm">Valid Regex Pattern</label>
-                          <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" [ngFormControl]="column.controls.validPattern" placeholder="Valid Pattern">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-4 form-control-label form-control-sm">Valid Message</label>
-                          <div class="col-sm-8">
-                            <textarea class="form-control form-control-sm" row="3" [ngFormControl]="column.controls.validPatternMessage" placeholder="Validation Message"></textarea>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </accordion-group>
-      </accordion>
+      <div class="row">
+        <table class="data-table table-hover table-sm">
+          <thead class="thead-default">
+            <tr>
+              <th>Column name</th>
+              <th>Code name</th>
+              <th>Display label</th>
+              <th>Data type</th>
+              <th>Column type</th>
+              <th>Show in list</th>
+              <th>Searchable</th>
+              <th>Sortable</th>
+            </tr>
+          </thead>
+          <tbody>
+             <tr *ngFor="let column of columns.controls">
+              <td>
+                <input type="text" class="form-control form-control-sm" placeholder="Column name"
+                  [ngFormControl]="column.controls['columnName']">
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm" placeholder="Code name"
+                  [ngFormControl]="column.controls['codeName']">
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm" placeholder="Display label"
+                  [ngFormControl]="column.controls['displayLabel']">
+              </td>
+              <td>
+                <select class="form-control form-control-sm" [ngFormControl]="column.controls['dataType']">
+                  <option *ngFor="let dataType of dataTypes" [value]="dataType">{{dataType}}</option>
+                </select>
+              </td>
+              <td>
+                <select class="form-control form-control-sm" [ngFormControl]="column.controls['columnType']">
+                  <option *ngFor="let columnType of columnTypes" [value]="columnType">{{columnType}}</option>
+                </select>
+              </td>
+              <td><input type="checkbox" [ngFormControl]="column.controls['showInList']"></td>
+              <td><input type="checkbox" [ngFormControl]="column.controls['searchable']"></td>
+              <td><input type="checkbox" [ngFormControl]="column.controls['sortable']"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </form>
 </div>

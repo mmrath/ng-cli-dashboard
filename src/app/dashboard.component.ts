@@ -22,7 +22,7 @@ import { TableDefListComponent, TableDefEditComponent } from './table-def';
   { path: '/user', component: UserListComponent },
 
   { path: '/table-def/new', component: TableDefEditComponent },
-  { path: '/table-def/edit', component: TableDefEditComponent },
+  { path: '/table-def/:id', component: TableDefEditComponent },
   { path: '/table-def', component: TableDefListComponent }
 ])
 export class DashboardAppComponent {

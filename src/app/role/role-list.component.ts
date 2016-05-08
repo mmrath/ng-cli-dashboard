@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
+import {OnActivate, RouteSegment, Tree} from '@angular/router';
+
 import {TableDefService} from '../shared/services';
 import {TableDef} from '../shared/models';
 import {DataGridComponent} from '../shared/components';
-import {OnActivate, RouteSegment, Tree} from '@angular/router';
-
 
 @Component({
   moduleId: module.id,
