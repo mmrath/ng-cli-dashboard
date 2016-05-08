@@ -4,7 +4,6 @@ import {Component, OnInit} from '@angular/core';
   moduleId: module.id,
   selector: 'user-edit',
   templateUrl: 'user-edit.component.html',
-  styleUrls: ['user-edit.component.css']
 })
 export class UserEditComponent implements OnInit {
 

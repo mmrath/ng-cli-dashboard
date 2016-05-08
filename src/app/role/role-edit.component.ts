@@ -2,9 +2,9 @@ import {Component} from '@angular/core';
 import {Router, OnActivate, RouteSegment, Tree, ROUTER_DIRECTIVES} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 
-import {RoleService} from '../role.service';
-import {PermissionService} from '../permission.service';
-import {Role, Permission, Resource} from '../../shared/models';
+import {RoleService} from './shared';
+import {PermissionService} from './shared';
+import {Role, Permission, Resource} from '../shared/models';
 
 
 @Component({

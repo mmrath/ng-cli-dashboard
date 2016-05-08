@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {TableDefService} from '../../shared/services';
-import {TableDef} from '../../shared/models';
-import {DataGridComponent} from '../../shared/components';
+import {TableDefService} from '../shared/services';
+import {TableDef} from '../shared/models';
+import {DataGridComponent} from '../shared/components';
 import {OnActivate, RouteSegment, Tree} from '@angular/router';
 
 

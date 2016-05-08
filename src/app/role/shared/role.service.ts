@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {ROLE_API} from '../shared/constants/api-path';
-import {Role, Page} from '../shared/models';
+import {ROLE_API} from '../../shared/constants/api-path';
+import {Role, Page} from '../../shared/models';
 import {Observable} from 'rxjs/Observable';
 import {
   RestClient, GET, PUT, POST, BaseUrl, DefaultHeaders, Path, Body,
-} from '../shared/utils/rest-client';
+} from '../../shared/utils/rest-client';
 
 @Injectable()
 @DefaultHeaders({

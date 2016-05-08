@@ -1,3 +1,2 @@
-export {UserRootComponent} from './user-root.component';
-export * from './user-list';
-export * from './user-edit';
+export * from './user-list.component';
+export * from './user-edit.component';

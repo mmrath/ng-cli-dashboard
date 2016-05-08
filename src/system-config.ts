@@ -30,15 +30,18 @@ const barrels: string[] = [
   'app',
   'app/shared',
   'app/shared/components',
-  'app/shared/components/login', 'app/shared/components/navbar', 'app/shared/components/footer',
+  'app/shared/components/login',
+  'app/shared/components/navbar',
+  'app/shared/components/footer',
+  'app/shared/components/sidebar',
   'app/shared/constants',
   'app/shared/directives',
   'app/shared/models',
   'app/shared/services',
   'app/shared/utils',
-  'app/user', 'app/user/user-list', 'app/user/user-edit',
-  'app/role', 'app/role/role-list', 'app/role/role-edit',
-  'app/shared/components/sidebar',
+  'app/user', 'app/user/shared',
+  'app/role', 'app/role/shared',
+  'app/table-def', 'app/table-def/shared',
   /** @cli-barrel */
 ];
 

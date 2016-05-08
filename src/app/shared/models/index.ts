@@ -57,16 +57,16 @@ export interface User {
 }
 
 export interface ColumnDef {
-  id: number;
-  index: number;
-  codeName: string;
-  columnName: string;
-  displayLabel: string;
-  dataType: string;
-  columnType: string;
-  searchable: boolean;
-  sortable: boolean;
-  showInList: boolean;
+  id?: number;
+  index?: number;
+  codeName?: string;
+  columnName?: string;
+  displayLabel?: string;
+  dataType?: string;
+  columnType?: string;
+  searchable?: boolean;
+  sortable?: boolean;
+  showInList?: boolean;
   dataTemplate?: string;
   headerTemplate?: string;
 }

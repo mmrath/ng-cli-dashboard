@@ -1,4 +1,4 @@
-<div *ngIf="tableDef" class="row">
+<div *ngIf="tableDef" class="row container">
   <data-grid [tableDef]="tableDef" newLink="/role/new" editLink="/role" apiBase="/api/data/role"></data-grid>
 </div>
-<div *ngIf="!tableDef" class="row">Loading Role List</div>
+<div *ngIf="!tableDef" class="row container">Loading Role List</div>
