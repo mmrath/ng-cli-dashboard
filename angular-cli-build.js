@@ -11,7 +11,9 @@ module.exports = function(defaults) {
       'es6-shim/es6-shim.js',
       'reflect-metadata/*.js',
       'rxjs/**/*.js',
-      '@angular/**/*.js'
+      '@angular/**/*.js',
+      'font-awesome/css/font-awesome.min.css',
+      'font-awesome/fonts/*.{otf,eot,svg,ttf,woff,woff2}'
     ]
   });
 };

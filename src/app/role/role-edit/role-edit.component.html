@@ -1,0 +1,66 @@
+<form class="form-horizontal" (ngSubmit)="onSubmit()" #roleForm="ngForm">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 form-group m-b-0">
+      <h3 [ngSwitch]="isNew">
+        <template [ngSwitchWhen]="true">New Role</template>
+        <template ngSwitchDefault>Edit Role</template>
+      </h3>
+      <div class="col-sm-12 form-group" *ngIf="errorMessages">
+         <div *ngFor="let message of errorMessages">
+           {{message}}
+         </div>
+      </div>
+      <div class="row form-group">
+        <label [attr.for]="name" class="col-sm-4 col-lg-2 form-control-label text-sm-right">Name</label>
+        <div class="col-sm-4 col-lg-3">
+          <template [ngIf]="!isNew">
+            <input type="hidden" class="form-control" [(ngModel)]="role.id" ngControl="id" #name="ngForm" />
+          </template>
+          <input type="text" class="form-control" [(ngModel)]="role.name" [attr.id]="name" ngControl="name" #name="ngForm" [attr.placeholder]="'Role name'" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <label [attr.for]="description" class="col-sm-3 col-lg-2 form-control-label text-sm-right">Description</label>
+        <div class="col-sm-4 col-lg-3">
+          <input type="text" class="form-control" [(ngModel)]="role.description" [attr.id]="description" [attr.placeholder]="'Description'" ngControl="description" #name="ngForm" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row m-b-1">
+    <label [attr.for]="description" class="col-sm-3 col-lg-2 form-control-label text-sm-right">Permissions</label>
+    <div class="col-sm-8 col-lg-10">
+        <table class="data-table table-hover table-sm">
+          <thead class="thead-default">
+
+            <tr>
+              <th rowspan="2">Resource</th>
+              <th *ngFor="let accessLevel of accessLevels">
+                {{accessLevel}}
+              </th>
+            </tr>
+            <tr>
+              <th *ngFor="let accessLevel of accessLevels" class="text-sm-center">
+                <input type="checkbox" [(ngModel)]="selectAllAccessLevel[accessLevel]" (change)="toggleSelectAllResource($event,accessLevel)" value>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let resource of resources">
+              <td>{{resource.name}}</td>
+              <td *ngFor="let accessLevel of accessLevels" class="text-sm-center">
+                <template [ngIf]="isValidPermission(resource, accessLevel)">
+                  <input type="checkbox" [(ngModel)]="permissionGroups[resource.id][accessLevel].selected" (change)="resetSelectAll($event,accessLevel)" value>
+                </template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+  <div class="row form-group text-center">
+      <div class="col-sm-6 col-lg-4 offset-sm-4 offset-lg-2 text-center">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+  </div>
+</form>

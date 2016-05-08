@@ -1,3 +1,11 @@
-<h1>
-  {{title}}
-</h1>
+<app-navbar></app-navbar>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <app-sidebar></app-sidebar>
+    </div>
+    <div class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 main">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

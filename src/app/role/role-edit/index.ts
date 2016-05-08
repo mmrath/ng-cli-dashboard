@@ -1,0 +1,1 @@
+export {RoleEditComponent} from './role-edit.component';

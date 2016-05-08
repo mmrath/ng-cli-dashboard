@@ -15,8 +15,4 @@ describe('App: Dashboard', () => {
     expect(app).toBeTruthy();
   }));
 
-  it('should have as title \'dashboard works!\'',
-      inject([DashboardAppComponent], (app: DashboardAppComponent) => {
-    expect(app.title).toEqual('dashboard works!');
-  }));
 });

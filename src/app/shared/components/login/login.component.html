@@ -1,0 +1,22 @@
+<div class="app-login center-block">
+  <h1>Login</h1>
+  <form role="form" (submit)="login($event, username.value, password.value)">
+    <div class="form-group row">
+      <label for="username" class="col-sm-6 col-md-4 form-control-label">Username</label>
+      <div class="col-sm-6 col-md-4">
+        <input type="text" #username class="form-control" id="username" placeholder="Username">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="password" class="col-sm-6 col-md-4 form-control-label">Password</label>
+      <div class="col-sm-6 col-md-4">
+        <input type="password" #password class="form-control" id="password" placeholder="Password">
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-sm-offset-6 col-md-offset-4 col-sm-6 col-md-4">
+        <button type="submit" class="btn btn-secondary">Login</button>
+      </div>
+    </div>
+  </form>
+</div>

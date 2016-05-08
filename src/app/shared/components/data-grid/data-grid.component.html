@@ -1,0 +1,93 @@
+<template [ngIf]="tableDef" *ngIf="page">
+  <div class="row">
+      <div class="col-sm-12 form-group">
+          <textarea class="form-control" rows="1" [(ngModel)]="advancedSearchQuery"></textarea>
+      </div>
+      <div class="col-sm-12 form-group">
+          <button type="button" class="btn btn-primary" (click)="advancedSearch($event)">Search</button>
+          <button type="button" class="btn btn-secondary" (click)="advancedSearchQuery=''">Reset</button>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 col-xl-6 form-group" *ngIf="tableDef.insertable">
+      <a href class="btn btn-primary" role="button" (click)="navigateToNew($event)">
+        <i class="fa fa-plus-square"></i> New
+      </a>
+      <a href class="btn btn-primary" role="button" (click)="navigateToNew($event)">
+        <i class="fa fa-download"></i> Download
+      </a>
+    </div>
+    <div class="col-sm-6 col-xl-6">
+      <div class="pull-sm-right">
+        <dg-page-size [size]="page.size" [pageSizes]="pageSizes" (pageSizeChanged)="onPageSizeChange($event)">
+        </dg-page-size>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="data-table table table-hover table-sm">
+        <thead class="thead-default">
+          <tr>
+            <th>
+              <template [ngIf]="tableDef.multiSelectable">
+                <input type="checkbox" [(ngModel)]="allSelected" (change)="toggleSelectAll($event)">
+                <i *ngIf="tableDef.updatable" class="fa fa-pencil invisible" aria-hidden="true"></i>
+                <i *ngIf="tableDef.deletable" class="fa fa-trash-o invisible" aria-hidden="true"></i>
+              </template>
+            </th>
+            <template ngFor let-col [ngForOf]="tableDef.columns">
+              <th *ngIf="col.showInList" (click)="sort(col)">
+                {{col.displayLabel}}
+                <template [ngIf]="col.sortable">
+                  <i class="fa" [ngClass]="getSortClass(col)"></i>
+                </template>
+              </th>
+            </template>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr>
+            <template [ngIf]="tableDef.multiSelectable">
+              <td></td>
+            </template>
+            <template ngFor let-col [ngForOf]="tableDef.columns">
+              <td *ngIf="col.showInList">
+                <template [ngIf]="col.searchable">
+                  <div class="form-inline" role="form">
+                    <input type="text" class="form-control pull-sm-left m-a-0">
+                      <a href class="btn btn-primary pull-sm-left" role="button" (click)="navigateToNew($event)">
+                      <i class="fa fa-search"></i>
+                    </a>
+                  </div>
+                </template>
+              </td>
+            </template>
+          </tr>
+          <tr *ngFor="let row of page.content; let i = index" [ngClass]="{selected:selectedRows[i]}">
+            <td>
+              <input type="checkbox" [(ngModel)]="selectedRows[i]" (change)="rowSelectionChange($event)">
+              <a href *ngIf="tableDef.updatable" [routerLink]="[editLink, row[tableDef.primaryKeyColumn.codeName]]">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </a>
+              <a href *ngIf="tableDef.deletable" (click)="deleteRow(row,$event)">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+              </a>
+            </td>
+            <template ngFor let-col [ngForOf]="tableDef.columns">
+              <td *ngIf="col.showInList">{{row[col.codeName]}}</td>
+            </template>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+<div class="row">
+  <div class="col-md-12" *ngIf="page">
+    <dg-pager [number]="page.number" [totalPages]="page.totalPages" [totalElements]="page.totalElements" [size]="page.size" [numberOfElements]="page.numberOfElements" [pageSizes]="pageSizes" (pageChanged)="onPageChange($event)" (pageSizeChanged)="onPageSizeChange($event)">
+    </dg-pager>
+  </div>
+</div>
+<div *ngIf="!tableDef" class="row">Loading grid</div>

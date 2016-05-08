@@ -1,0 +1,31 @@
+<table class="table data-table table-striped table-hover table-sm table-bordered">
+  <thead class="thead-default">
+    <tr>
+      <th>
+        <template [ngIf]="table.multiSelectable">
+          <input type="checkbox" [(ngModel)]="allSelected" (change)="toggleSelectAll($event)">
+        </template>
+      </th>
+      <th *ngIf="table.updatable || table.deletable">Action</th>
+      <template ngFor let-col [ngForOf]="table.columns">
+        <th [ngClass]="getSortClass(col)" *ngIf="col.showInList" (click)="sort(col)">
+          {{col.displayLabel}}
+        </th>
+      </template>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of page.content; let i = index" [ngClass]="{selected:selectedRows[i]}">
+      <td>
+        <input type="checkbox" [(ngModel)]="selectedRows[i]" (change)="rowSelectionChange($event)">
+      </td>
+      <td *ngIf="table.updatable || table.deletable">
+        <a href *ngIf="table.updatable" (click)="onEdit.next(row)">Edit</a>
+        <a href *ngIf="table.deletable" (click)="onDelete.next(row)">Delete</a>
+      </td>
+      <template ngFor let-col [ngForOf]="table.columns">
+        <td *ngIf="col.showInList">{{row[col.code]}}</td>
+      </template>
+    </tr>
+  </tbody>
+</table>
