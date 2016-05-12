@@ -92,6 +92,9 @@
           <tbody>
              <tr *ngFor="let column of columns.controls">
               <td>
+                <template [ngIf]="column.controls['id']">
+                  <input type="hidden" class="form-control" [ngFormControl]="column.controls['id']" />
+                </template>
                 <input type="text" class="form-control form-control-sm" placeholder="Column name"
                   [ngFormControl]="column.controls['columnName']">
               </td>

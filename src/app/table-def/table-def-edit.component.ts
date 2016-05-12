@@ -47,26 +47,11 @@ export class TableDefEditComponent implements OnInit, OnActivate {
       updatable: new Control(true, Validators.required),
       deletable: new Control(true, Validators.required),
       multiSelectable: new Control(true, Validators.required),
+      version: new Control(0, Validators.required),
       columns: this.columns
     });
 
-    tableNameControl.valueChanges.debounceTime(400)
-      .distinctUntilChanged((a, b) => {
-        if (typeof a === 'string' && typeof b === 'string') {
-          return (<string>a).toUpperCase() === (<string>b).toUpperCase();
-        } else {
-          return false;
-        }
-      })
-      .filter(_ => tableNameControl.valid)
-      .switchMap(name =>
-        this.tableDefService.getByTableName(<string>name)
-          .catch(error => { return Observable.empty(); })
-      )
-      .subscribe(
-      res => { this.update(<TableDef>res); },
-      err => { console.log(err); }
-      );
+
 
   }
 
@@ -82,6 +67,7 @@ export class TableDefEditComponent implements OnInit, OnActivate {
           this.updateControlValue('updatable', tableDef.updatable);
           this.updateControlValue('deletable', tableDef.deletable);
           this.updateControlValue('multiSelectable', tableDef.multiSelectable);
+          this.updateControlValue('version', tableDef.version);
 
           if (typeof tableDef.columns !== 'undefined' && tableDef.columns instanceof Array) {
             for (var columnDef of tableDef.columns) {
@@ -92,6 +78,26 @@ export class TableDefEditComponent implements OnInit, OnActivate {
         err => {
           console.log('Error ' + err);
         }
+      );
+    }
+    if (this.isNew) {
+      let tableNameControl = this.form.controls['tableName'];
+      tableNameControl.valueChanges.debounceTime(400)
+      .distinctUntilChanged((a, b) => {
+        if (typeof a === 'string' && typeof b === 'string') {
+          return (<string>a).toUpperCase() === (<string>b).toUpperCase();
+        } else {
+          return false;
+        }
+      })
+      .filter(_ => tableNameControl.valid)
+      .switchMap(name =>
+        this.tableDefService.getByTableName(<string>name)
+          .catch(error => { return Observable.empty(); })
+      )
+      .subscribe(
+      res => { this.update(<TableDef>res); },
+      err => { console.log(err); }
       );
     }
   }

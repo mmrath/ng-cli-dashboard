@@ -31,9 +31,9 @@
           <tr>
             <th>
               <template [ngIf]="tableDef.multiSelectable">
-                <input type="checkbox" [(ngModel)]="allSelected" (change)="toggleSelectAll($event)">
-                <i *ngIf="tableDef.updatable" class="fa fa-pencil invisible" aria-hidden="true"></i>
-                <i *ngIf="tableDef.deletable" class="fa fa-trash-o invisible" aria-hidden="true"></i>
+                <input type="checkbox" class="pull-sm-left" [(ngModel)]="allSelected" (change)="toggleSelectAll($event)">
+                <i *ngIf="tableDef.updatable" class=" pull-sm-left fa fa-pencil" aria-hidden="true"></i>
+                <i *ngIf="tableDef.deletable" class="pull-sm-left fa fa-trash-o" aria-hidden="true"></i>
               </template>
             </th>
             <template ngFor let-col [ngForOf]="tableDef.columns">

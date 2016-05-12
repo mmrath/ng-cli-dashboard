@@ -23,6 +23,14 @@ export interface Page<T>{
   numberOfElements: number; // Number of elements in current page
 }
 
+export interface AbsrtactAuditEntity {
+  createdBy?: string;
+  createdDate?: string;
+  modifiedBy?: string;
+  modifiedDate?: string;
+  version?: number;
+}
+
 export interface Resource {
   id: number;
   name: string;
@@ -71,7 +79,7 @@ export interface ColumnDef {
   headerTemplate?: string;
 }
 
-export interface TableDef {
+export interface TableDef extends AbsrtactAuditEntity {
   id: number;
   codeName: string;
   tableName: string;
